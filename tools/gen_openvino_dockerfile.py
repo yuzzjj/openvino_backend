@@ -55,6 +55,7 @@ def dockerfile_for_linux(output_file):
     df += '''
 # Ensure apt-get won't prompt for selecting options
 ENV DEBIAN_FRONTEND=noninteractive
+RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak && sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g'  /etc/apt/sources.list && apt update
 RUN apt-get update && apt-get install -y --no-install-recommends \
         patchelf
 
@@ -71,7 +72,8 @@ RUN wget https://apt.repos.intel.com/openvino/2021/GPG-PUB-KEY-INTEL-OPENVINO-20
     apt update && \
     apt install -y intel-openvino-dev-ubuntu20-${OPENVINO_VERSION}
 
-ARG INTEL_COMPUTE_RUNTIME_URL=https://github.com/intel/compute-runtime/releases/download/19.41.14441
+#ARG INTEL_COMPUTE_RUNTIME_URL=http://storage.360buyimg.com/hdrx-dist/algopy-bak/triton_deps
+ARG INTEL_COMPUTE_RUNTIME_URL=http://storage.360buyimg.com/hdrx-dist/algopy-bak/triton_deps
 RUN wget ${INTEL_COMPUTE_RUNTIME_URL}/intel-gmmlib_19.3.2_amd64.deb && \
     wget ${INTEL_COMPUTE_RUNTIME_URL}/intel-igc-core_1.0.2597_amd64.deb && \
     wget ${INTEL_COMPUTE_RUNTIME_URL}/intel-igc-opencl_1.0.2597_amd64.deb && \
